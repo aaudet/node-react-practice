@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 //creates the new app.
 app.get('/', (req, res) => {
-  res.send ({hi: 'there'});
+  res.send ({bye: 'buddy'});
 });
 //get is associated with geting info.
 //'/' if anyone visits localhost:5000/ then they get this information. Looking for that request
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 
 //.gitignore means that deployment does not use all of the dependenceis
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 //dynamically figures out which port to listen to
 //injects environment vairables. Variables set during the runtime.
 //Lets Heroku tell us info on the fly, or if there's Heroku assign it to port.
