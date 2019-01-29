@@ -15,4 +15,16 @@ module.exports = app => {
 app.get('/auth/google/callback', passport.authenticate('google'));
 //makes new instance of user getting authetnicated
 //.use just makes passport using a particular strategy
+
+app.get('/api/logout', (req, res) => {
+  req.logout();
+  res.send(req.user);
+  //Lecture 44, section 4
+});
+
+app.get('/api/current_user', (req, res) => {
+    res.send(req.user);
+    //Lecture 43 4:00
+});
+
 };

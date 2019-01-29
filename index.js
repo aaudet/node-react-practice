@@ -1,21 +1,40 @@
 const express = require('express');
 //common js modules
 //do not use import express from 'express' unless in the react side for es2015 modules
+const mongoose = require('mongoose');
+
+const cookieSession = require('cookie-session');
+
+const passport = require('passport');
+
 const keys = require('./config/keys');
 //requiring the keys.js file for the key to mongoose.
-const mongoose = require('mongoose');
 
 require('./models/User');
 
 require('./services/passport');
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
+
 // need to keep this secret, and never push to github
 
 
 const app = express();
 //creates the new app.
 // run npm run dev to run nodemon for constantly running the server
+
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+    //Lecutre 42 3:58
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+//Lecture 42 end
+
 
 require('./routes/authRoutes')(app);
 

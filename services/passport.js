@@ -5,6 +5,18 @@ const keys = require('../config/keys');
 
 const User = mongoose.model('users');
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+  //refers to the mongoid in the collection
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
+  })
+  //lecture 41 1:32
+});
+
 passport.use(
   new GoogleStrategy(
       {
@@ -14,17 +26,14 @@ passport.use(
         //route sent to after granted permissions to application
       },
       (accessToken, refreshToken, profile, done) => {
-        User.findOne({ googleId: profile.id })
-          .then((existingUser) => {
+        User.findOne({ googleId: profile.id }).then((existingUser) => {
             if (existingUser) {
               //we already have a record with the given profile ID
               done(null, existingUser);
               //finished o-auth process
               //null means that we're all good.
             } else {
-              new User({ googleId: profile.id })
-              .save()
-              .then(user => done(null, user));
+              new User({ googleId: profile.id }).save().then(user => done(null, user));
               //creates new instance of a user using their Google ID
               //.save() saves user to the database for us.
 
